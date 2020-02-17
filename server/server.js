@@ -7,7 +7,7 @@ const config = require("./config/config").get(process.env.NODE_ENV);
 const app = express();
 
 mongoose.Promise = global.Promise;
-mongoose.connect(config.DATABASE); 
+mongoose.connect(config.DATABASE);
 
 const { User } = require("./models/user");
 const { Book } = require("./models/book");
@@ -15,6 +15,8 @@ const { auth } = require("./middleware/auth");
 
 app.use(bodyParser.json());
 app.use(cookieParser());
+
+app.use(express.static("client/build"));
 
 //GET//
 //get authentication
@@ -27,7 +29,7 @@ app.get("/api/auth", auth, (req, res) => {
     lastname: req.user.lastname
   });
 });
-//logout user 
+//logout user
 app.get("/api/logout", auth, (req, res) => {
   req.user.deleteToken(req.token, (err, user) => {
     if (err) return res.status(400).send(err);
@@ -159,6 +161,13 @@ app.delete("/api/delete_book", (req, res) => {
     res.json(true);
   });
 });
+
+if (process.env.NODE_ENV === "production") {
+  const path = require("path");
+  app.get("/*",(req,res)=>{
+    res.sendFile(path.resolve(__dirname,'../client','build','index.html'))
+  });
+}
 
 const port = process.env.PORT || 3001;
 app.listen(port, () => {
