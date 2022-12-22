@@ -25,7 +25,7 @@
     "epress": "0.0.1-security",
     "express": "^4.17.1",
     "http-proxy-middleware": "^0.20.0",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "moment-js": "^1.1.15",
     "mongoose": "^5.8.7"
   }
